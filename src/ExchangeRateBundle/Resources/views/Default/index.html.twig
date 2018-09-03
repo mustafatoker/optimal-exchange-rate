@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<div class="container">
+
+    <div class="card">
+        <h5 class="card-header">Optimal Currency Rates</h5>
+        <div class="card-body">
+
+            {% if currencyRates is defined %}
+
+                <h6 class="card-title">
+                    <strong>Fetch time: {{ currencyRates|last.createdAt|date("Y/m/d H:i:s") }}</strong>
+                </h6>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Parity</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Provider</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for currencyRate in currencyRates %}
+                        <tr>
+                            <td><strong>{{ currencyRate.symbol }}</strong></td>
+                            <td>{{ currencyRate.amount }}</td>
+                            <td>{{ currencyRate.provider }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            {% else %}
+                {{ "Henüz bir kayıt eklenmemiş" }}
+            {% endif %}
+
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+parameters:
+    fixer.exchange.service: 'http://www.mocky.io/v2/5a74519d2d0000430bfe0fa0'
+    currency_layer.exchange.service: 'http://www.mocky.io/v2/5a74524e2d0000430bfe0fa3'
+
+services:
+  app.command.fetch_optimal_rates:
+    class: ExchangeRateBundle\Command\ExchangeFetchRatesCommand
+    arguments:
+      - '@exchange_rate_service'
+
+  exchange_rate_service:
+      class: ExchangeRateBundle\Services\ExchangeRates
+      calls:
+       - [addProvider, ['@fixer_service_provider']]
+       - [addProvider, ['@currency_layer_service_provider']]
+
+  GuzzleHttp\Client: '@guzzle_client'
+
+  guzzle_client:
+      class: \GuzzleHttp\Client
+
+  http_response_factory:
+    class: ExchangeRateBundle\Services\Providers\ResponseFactory
+
+  fixer_service_provider:
+    class: ExchangeRateBundle\Services\Providers\FixerServiceProvider
+    arguments: ['%fixer.exchange.service%','@guzzle_client', '@http_response_factory']
+
+  currency_layer_service_provider:
+      class: ExchangeRateBundle\Services\Providers\CurrencyLayerServiceProvider
+      arguments: ['%currency_layer.exchange.service%','@guzzle_client', '@http_response_factory']
+
+  exchange_rate_registrar_service:
+    class: ExchangeRateBundle\Services\ExchangeRateRegistrar
+    arguments:
+      - '@doctrine.orm.entity_manager'
+
